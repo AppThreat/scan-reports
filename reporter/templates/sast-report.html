@@ -33,7 +33,7 @@
       <div class="hero hero-sm bg-dark">
         <div class="hero-body">
           <h1>SAST scan status <span class="tooltip tooltip-top" data-tooltip="{% if isError %}Issues were found in this run{% else %}No major issues were found{% endif %}"><i class="text-{% if isError %}error{% else %}success{% endif %} icon icon-4x icon-{% if isError %}cross{% else %}check{% endif %}"></i></span></h1>
-          <p>Report from the scan performed at <span class="text-dark chip"><i class="icon icon-time"> </i>&nbsp; {{ invocation.endTimeUtc }}</span> for <a class="btn" href="{{ versionControlProvenance.repositoryUri
+          <p>Report from the scan performed on <span class="text-dark chip"><i class="icon icon-time"> </i>&nbsp; {{ invocation.endTimeUtc|replace("T", " at ")|replace("Z", "") }}</span> for <a class="btn" href="{{ versionControlProvenance.repositoryUri
             }}">{{ versionControlProvenance.repositoryUri|default('local')
             }}</a></p>
         </div>
@@ -91,7 +91,7 @@
           <tbody>
           {% for sev in ["critical", "high", "medium", "low", "total"] -%}
           <tr>
-            <td><span class="chip">{{ sev|upper }}</span></td>
+            <td><span class="bg-{{ sev|auto_colourize }} chip">{{ sev|upper }}</span></td>
             <td>{{ metrics.get(sev)|default('NA') }}</td>
           </tr>
           {%- endfor %}
@@ -102,11 +102,13 @@
       <p>&nbsp;</p>
       <p><i class="icon icon-flag icon-2x text-warning"></i>&nbsp; AppThreat recommends immediate remediation of the key issues identified before using this application in a live environment.</p>
       {% else %}
-      <p>Based on this information, the application is ready for deployment to test and production environments. Please refer to the dependency and container scan reports (if available) for additional context.</p>
+      <p>&nbsp;</p>
+      <p><i class="icon icon-check icon-2x text-success"></i>&nbsp; Based on this report, the application is certified as ready for deployment to test and production environments. Please refer to the dependency and container scan reports (if available) for additional context.</p>
       {% endif %}
     </div>
   </div>
   </details>
+  {% if key_issues|length %}
   <div class="divider text-center" data-content="Requires attention"></div>
   <section id="#key_issues"></section>
   <details class="accordion" open>
@@ -144,6 +146,7 @@
     {%- endfor %}
   </div>
   </details>
+  {% endif %}
   <div class="divider text-center" data-content="All"></div>
   <section id="#all_issues"></section>
   <div class="columns col-gapless">
@@ -185,7 +188,7 @@
           <tr data-tag="tag-{{ result.properties.issue_severity|replace('CRITICAL', '1')|replace('HIGH', '2')|replace('MEDIUM', '3')|replace('LOW', '4') }}" class="filter-item">
             <td>{{ result.ruleId|default('') }}
             </td>
-            <td><span class="chip bg-{{ result.properties.issue_severity|replace('CRITICAL', 'error')|replace('HIGH', 'warning')|replace('MEDIUM', 'gray') }}">{{ result.properties.issue_severity }}</span></td>
+            <td><span class="chip bg-{{ result.properties.issue_severity|auto_colourize }}">{{ result.properties.issue_severity }}</span></td>
             <td><a target="_blank" class="btn btn-link" href="{{ location.physicalLocation.artifactLocation.uri }}#L{{ location.physicalLocation.contextRegion.startLine }}"><i class="icon icon-link"></i> {{ location.physicalLocation.artifactLocation.uri|basename }}</a></td>
             <td>
               <span style="max-width: 40%;" class="d-inline-block">{{ result.message.text|auto_text_highlight|safe }}</span>

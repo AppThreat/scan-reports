@@ -8,7 +8,7 @@ setuptools.setup(
     version="1.0.0",
     author="Team AppThreat",
     author_email="cloud@appthreat.com",
-    description="UI for producing reports from AppThreat scan results. Compatible with SARIF and grafeas format.",
+    description="Library for producing gorgeous html reports from AppThreat scan results. Compatible with SARIF and grafeas format.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/appthreat/scan-reports",
