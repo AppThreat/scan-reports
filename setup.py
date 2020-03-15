@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="appthreat-scan-reports",
-    version="1.0.0",
+    version="1.0.1",
     author="Team AppThreat",
     author_email="cloud@appthreat.com",
     description="Library for producing gorgeous html reports from AppThreat scan results. Compatible with SARIF and grafeas format.",
@@ -13,6 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/appthreat/scan-reports",
     packages=setuptools.find_packages(),
+    include_package_data=True,
     install_requires=["Jinja2"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
